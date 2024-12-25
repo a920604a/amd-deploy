@@ -1,0 +1,24 @@
+---
+- name: Copy all launcher files from the local machine to a remote machine
+  hosts: prod
+  vars_files:
+    - common_vars.yml
+  tasks:
+    - name: Ensure the target directory is absent
+      file:
+        path: "{{ target_launcher_path }}"
+        state: absent
+
+    - name: Ensure the target directory exists
+      file:
+        path: "{{ target_launcher_path }}"
+        state: directory
+        mode: "0755"
+
+    - name: Copy files to remote devBuild folder
+      copy:
+        src: "{{ src_launcher_path }}"
+        dest: "{{ target_launcher_path }}"
+        owner: oomii
+        group: oomii
+        mode: "0755"

@@ -1,0 +1,9 @@
+---
+- name: Copy trt.engine to remote machines
+  hosts: prod
+  tasks:
+    - name: Copy trt.engine to StreamingAssets directory
+      copy:
+        src: "/home/oomii/Documents/cplus_package/convert-lib/trt.engine"
+        dest: "/home/oomii/Desktop/devBuild/amd_Data/StreamingAssets/"
+        remote_src: yes

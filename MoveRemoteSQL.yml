@@ -1,0 +1,28 @@
+- name: Delete and recreate SQLite database
+  hosts: prod
+  vars_files:
+    - common_vars.yml
+  tasks:
+    - name: Check if SQLite database exists
+      stat:
+        path: "{{ src_file_path }}"
+      register: db_file_info
+
+    - name: Check if tmp folder exists
+      stat:
+        path: "{{ tmp_path }}"
+      register: tmp_info
+
+    - name: Create tmp folder if it doesn't exist
+      file:
+        path: "{{ tmp_path }}"
+        state: directory
+      when: not tmp_info.stat.exists
+
+    - name: copy the SQLite database to tmp folder
+      copy:
+        src: "{{ src_file_path }}"
+        dest: "{{ tmp_path }}"
+        remote_src: yes
+        force: yes
+      when: db_file_info.stat.exists

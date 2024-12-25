@@ -1,0 +1,29 @@
+- name: Get System Information
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: 列印我的主機名稱
+      ansible.builtin.debug:
+        var: ansible_hostname
+
+    - name: 列印我的LSB信息
+      ansible.builtin.debug:
+        msg: " {{ansible_lsb['id']}} {{ansible_lsb['major_release']}} {{ansible_lsb['release']}} {{ansible_lsb['description']}}"
+
+    - name: 列印資訊
+      ansible.builtin.debug:
+        msg: "記憶體大小: {{ ansible_memory_mb['real']['total'] }} MB"
+
+    - name: 獲取NVIDIA顯示卡信息
+      ansible.builtin.shell: lspci | grep -i NVIDIA
+      register: nvidia_info
+
+    - name: 提取NVIDIA顯示卡型號
+      ansible.builtin.set_fact:
+        nvidia_model: "{{ nvidia_info.stdout_lines[0] | regex_replace('.*VGA compatible controller: NVIDIA Corporation (.*)', '\\1') }}"
+      when: nvidia_info.stdout_lines | length > 0
+
+    - name: 列印NVIDIA顯示卡型號
+      ansible.builtin.debug:
+        msg: "NVIDIA顯示卡型號: {{ nvidia_model }}"
+

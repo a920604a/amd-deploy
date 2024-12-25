@@ -1,0 +1,74 @@
+---
+- name: Delete and Create SQLite database
+  hosts: localhost
+  vars_files:
+    - common_vars.yml
+  tasks:
+    - name: Check if SQLite database exists
+      stat:
+        path: "{{ db_path }}"
+      register: db_file_info
+
+    - name: Delete the SQLite database
+      file:
+        path: "{{ db_path }}"
+        state: absent
+      when: db_file_info.stat.exists
+
+    - name: Check if app folder exists
+      stat:
+        path: "{{ app_Data_path }}"
+      register: app_info
+
+    - name: Create a new empty SQLite database
+      command: touch {{ db_path }}
+      when: app_info.stat.exists
+
+    - name: Execute SQL files with SQLite3
+      shell: sqlite3 "{{ db_path }}" < "{{ item }}"
+      with_items:
+        - "{{ sql_path }}/drop.sql"
+        - "{{ sql_path }}/user.sql"
+        - "{{ sql_path }}/content.sql"
+        - "{{ sql_path }}/insert.sql"
+      when: app_info.stat.exists
+
+- name: Delete all FundusImage files in a directory on localhost
+  hosts: localhost
+  connection: local
+  vars_files:
+    - common_vars.yml
+  tasks:
+    - name: List files in the specified directory
+      find:
+        paths: "{{ streamAssets_path }}/FundusImage"
+        patterns: "*"
+      register: files_to_delete
+      when: app_info.stat.exists
+
+    - name: Delete files one by one
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ files_to_delete.files }}"
+      when: app_info.stat.exists
+
+- name: Delete all Log files in a directory on localhost
+  hosts: localhost
+  connection: local
+  vars_files:
+    - common_vars.yml
+  tasks:
+    - name: List files in the specified directory
+      find:
+        paths: "{{ streamAssets_path }}/Logs"
+        patterns: "*"
+      register: log_files_to_delete
+      when: app_info.stat.exists
+
+    - name: Delete files one by one
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ log_files_to_delete.files }}"
+      when: app_info.stat.exists

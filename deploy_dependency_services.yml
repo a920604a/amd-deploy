@@ -1,0 +1,18 @@
+---
+- name: Deploy terminate_process_and_children shell scripts, Detect HDMI, Detect Montior, virtual Web Camera Service, Mouse Lomit Service, install and uninstall shell scripts
+  hosts: prod
+  vars:
+    src_path: /home/tim/Desktop/unity3d_app/Pro/AMD_UI/Integrate
+    dst_path: /home/oomii/Desktop/.amd-package/
+  tasks:
+    - name: 刪除遠端目標目錄（如果存在）
+      file:
+        path: "{{ dst_path }}"
+        state: absent
+    - name: Copy files to remote dst_path folder
+      ansible.posix.synchronize:
+        src: "{{ src_path }}"
+        dest: "{{ dst_path }}"
+        rsync_opts:
+          - "--exclude=readme.md"
+          - "--exclude=*.git*"

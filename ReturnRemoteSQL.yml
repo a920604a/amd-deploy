@@ -1,0 +1,41 @@
+- name: Delete and recreate SQLite database
+  hosts: prod
+  vars_files:
+    - common_vars.yml
+  vars:
+    stream_path: /home/oomii/Desktop/devBuild/amd_Data/StreamingAssets/
+  tasks:
+    - name: Check if tmp folder exists
+      stat:
+        path: "/home/oomii/tmp"
+      register: tmp_info
+
+    - name: Check if dest file exists
+      stat:
+        path: "/home/oomii/tmp/amd.sqlite"
+      register: dest_info
+
+    - name: Debug stream_path
+      debug:
+        var: stream_path
+
+    - name: Delete old SQLite database if exists
+      file:
+        path: "{{ stream_path }}/amd.sqlite"
+        state: absent
+      when: tmp_info.stat.exists and dest_info.stat.exists
+
+    - name: copy the SQLite database in tmp folder to app
+      copy:
+        src: "{{ tmp_path }}/amd.sqlite"
+        dest: "{{ stream_path }}"
+        remote_src: yes
+        force: yes
+      when: tmp_info.stat.exists and dest_info.stat.exists
+      # notify: delete_tmp_sqlite
+
+  # handlers:
+  #   - name: delete_tmp_sqlite
+  #     file:
+  #       path: "{{ tmp_path }}/amd.sqlite"
+  #       state: absent

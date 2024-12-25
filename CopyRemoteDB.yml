@@ -1,0 +1,12 @@
+---
+- name: Copy StreamingAssets directory
+  hosts: prod
+  vars_files:
+    - common_vars.yml
+  tasks:
+    - name: Copy StreamingAssets directory to localhost
+      ansible.builtin.copy:
+        src: "{{ src_file_path }}"
+        dest: "{{ db_path }}"
+        remote_src: yes
+      delegate_to: localhost  # 這告訴 Ansible 在 localhost 上執行這個任務

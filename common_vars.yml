@@ -1,0 +1,14 @@
+src_file_path: /home/oomii/Desktop/devBuild/amd_Data/StreamingAssets/amd.sqlite
+tmp_path: /home/oomii/tmp
+
+db_path: /home/tim/Desktop/unity3d_app/Pro/AMD_UI/amd-launcher/amd-launcher/build/amd_Data/StreamingAssets/amd.sqlite
+app_Data_path: /home/tim/Desktop/unity3d_app/Pro/AMD_UI/amd-launcher/amd-launcher/build/amd_Data
+sql_path: /home/tim/Desktop/unity3d_app/Pro/AMD_UI/amd/Database
+streamAssets_path: /home/tim/Desktop/unity3d_app/Pro/AMD_UI/amd-launcher/amd-launcher/build/amd_Data/SrteamingAssets
+
+src_build_path: /home/tim/Desktop/unity3d_app/Pro/AMD_UI/amd-launcher/amd-launcher/build/
+target_path: /home/oomii/Desktop/launcher/
+
+src_launcher_path: /home/tim/Desktop/unity3d_app/Pro/AMD_UI/Integrate
+target_launcher_path: /home/oomii/Desktop/.amd-tmp-integrate
+# /home/tim/Desktop/unity3d_app/Pro/AMD_UI/amd-launcher/amd-launcher/build
